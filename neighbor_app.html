@@ -5,8 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Neighborhood map</title>
+    <style type="text/css">
+        html, body { height: 100%; margin: 0; padding: 0; }
+        .container { height: 100%; }
+        #map { height: 100%; }
+      </style>
 </head>
 <body>
+    <div class="container">
+        <div id="map"></div>
+    </div>
+    <script src="js/lib/knockout-3.4.2.js"></script>
+    <script src="js/app.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1oSjsz4Dftcbn2K4cjZWNy_tUAIr3cPA&v=3&callback=ViewModel">
+    </script>
     
 </body>
 </html>
