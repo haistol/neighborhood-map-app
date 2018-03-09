@@ -1,0 +1,20 @@
+
+html, body {
+    height: 100%;
+    margin: 0; 
+    padding: 0;
+}
+.container { 
+    display: flex;
+    flex-flow: wrap;
+    height: 100%; 
+}
+#map { 
+    width: 80%;
+    height: 100%; 
+}
+#palces {
+    min-width: 20%;
+    background: aquamarine;
+    height: 100%; 
+}
