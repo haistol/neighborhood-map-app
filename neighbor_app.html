@@ -9,12 +9,18 @@
 </head>
 <body>
     <div class="container">
-        <div id="places"></div>
+        <div id="places">
+            <p>Search: <input type="text" data-bind="event: { keyup: searchList }, textInput: filter"/></p>
+            <p data-bind="click: searchList"> click me</p>
+            <ul data-bind="foreach: places">
+                <li data-bind="text: name, click: $parent.showInfo"></li>
+            </ul>
+        </div>
         <div id="map"></div>
     </div>
     <script src="js/lib/knockout-3.4.2.js"></script>
     <script src="js/app.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1oSjsz4Dftcbn2K4cjZWNy_tUAIr3cPA&v=3&callback=MapViewModel">
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1oSjsz4Dftcbn2K4cjZWNy_tUAIr3cPA&v=3&callback=initMap">
     </script>
     
 </body>
