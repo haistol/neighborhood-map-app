@@ -8,15 +8,30 @@
     <link rel=stylesheet type=text/css href="css/style.css">
 </head>
 <body>
+        
     <div class="container">
+        
         <div id="places">
-            <p>Search: <input type="text" data-bind="event: { keyup: searchList }, textInput: filter"/></p>
-            <p data-bind="click: searchList"> click me</p>
-            <ul data-bind="foreach: places">
-                <li data-bind="text: name, click: $parent.showInfo"></li>
-            </ul>
+            <h1>MY LOCATION COOL</h1>
+            <div id="search-area">
+                <p><input id="search-input" type="text" data-bind="event: { keyup: searchList }, textInput: filter"/> search</p>
+            </div>
+            <nav id="filter-menu">
+                <ul data-bind="foreach: places">
+                    <li class="place-name"><p data-bind="text: name, click: $parent.showInfo"></p></li>
+                </ul>
+            </nav>
         </div>
-        <div id="map"></div>
+        <div id="content">
+            <div id="nav-button">
+                <div id="hamburger-menu" data-bind="click: toggleMenuDisplay">
+                    <div class="m-bar"></div>
+                    <div class="m-bar"></div>
+                    <div class="m-bar"></div>
+                </div>
+            </div>
+            <div id="map"></div>
+        </div>
     </div>
     <script src="js/lib/knockout-3.4.2.js"></script>
     <script src="js/app.js"></script>
