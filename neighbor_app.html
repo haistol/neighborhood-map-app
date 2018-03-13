@@ -11,7 +11,7 @@
         
     <div class="container">
         
-        <div id="places">
+        <div id="places" class="slide-menu-on">
             <h1>MY LOCATION COOL</h1>
             <div id="search-area">
                 <p><input id="search-input" type="text" data-bind="event: { keyup: searchList }, textInput: filter"/> search</p>
@@ -22,7 +22,7 @@
                 </ul>
             </nav>
         </div>
-        <div id="content">
+        <div id="content" class="content-divide">
             <div id="nav-button">
                 <div id="hamburger-menu" data-bind="click: toggleMenuDisplay">
                     <div class="m-bar"></div>
@@ -33,6 +33,7 @@
             <div id="map"></div>
         </div>
     </div>
+    <script src="js/lib/jquery.min.js"></script>
     <script src="js/lib/knockout-3.4.2.js"></script>
     <script src="js/app.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1oSjsz4Dftcbn2K4cjZWNy_tUAIr3cPA&v=3&callback=initMap">
