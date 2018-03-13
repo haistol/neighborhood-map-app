@@ -4,61 +4,46 @@ var MapLocation= {
         zoom: 13
 }
 
-var PlacesList= [{name:"cool place",location:{lat: 40.719526, lng: -74.0089934,visible: true}}];
+var PlacesList= [{name:'cool place',location:{lat: 40.719526, lng: -74.0089934},visible: true},
+{name:'cool place 2',location:{lat: 40.729526, lng: -74.0099934},visible: true}];
 var map= null;
 var markers=[];
+
 var Place =function(data){
     this.name= data.name;
     this.visible= ko.observable(data.visible);
 
 }
-function initMap(){
-    map = new google.maps.Map(document.getElementById('map'),MapLocation);
-    setMarkers(PlacesList);
-    showMarkers(map);
-}
-function setMarkers(list){
-    list.forEach(function(marker){
-        var markerOptions = {
-            position: marker.location,
-            animation: google.maps.Animation.DROP,
-            title: marker.name,
-          };
-        this.marker= new google.maps.Marker(markerOptions);
-        this.marker.addListener('click', function(marker){
-            return function(){
-            markerInteration(marker);
-            };
-        }(this.marker));
-        markers.push(this.marker);
-    });
-}
-function showMarkers(map){
-    markers.forEach(function(marker){
-        marker.setMap(map);
-    });
-}
-function getMarker(title){
-    var searchStr= title.toUpperCase();
-    var maker=null;
-    markers.forEach(function(item){
-        if(item.title.toUpperCase().indexOf(searchStr) >-1){
-            maker= item;
-        };
-        
-    });
-    return maker;
-}
-function markerInteration(marker){
-    markerAnimation(marker);
-}
-function markerAnimation(marker){
-    marker.setAnimation(google.maps.Animation.BOUNCE);
-    setTimeout(function(){
-        marker.setAnimation(google.maps.Animation.NONE);
-    },5000);
-}
 
+function initMap(){
+    map = createMap(MapLocation);
+    markers=setMarkers(map,PlacesList);
+    showMarkers(map,markers);
+}
+function createInfoContent(location){
+    var content=location;
+    wikipediaDataRequest(location);
+    return content;
+}
+function wikipediaDataRequest(location){
+    var data='';
+    var wikiRequestTimeout = setTimeout(function(){
+        data='failed to get wikipedia resources';
+    }, 8000);
+    var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search='+
+        location +'&format=json&callback=wikiCallback';
+    $.ajax({
+        url:wikiUrl,
+        dataType: "jsonp",
+        success: function( response ) {
+            console.log(response);
+            var article = response[2][0];
+            var articlelink = response[3][0];
+            $('#wikidata').append('<p>'+article+' <a href="' + articlelink+'">Wikipedia</a></p>');
+        }
+    });
+    return data;
+}
 var ViewModel = function(){
     var self = this;
     this.filter = ko.observable("");
@@ -68,12 +53,13 @@ var ViewModel = function(){
     })
     this.searchList = function(){
         var searchStr= self.filter().toUpperCase();
-        markers.forEach(function(item){
-            if(item.title.toUpperCase().indexOf(searchStr) >-1){
-                console.log(self.filter());
-                item.setMap(map);
+        self.places().forEach(function(place){
+            if(place.name.toUpperCase().indexOf(searchStr) >-1){
+                place.visible(true);
+                showMarker(map,place.name, markers);
             }else{
-                item.setMap(null);
+                place.visible(false);
+                showMarker(null,place.name, markers);
             };
         });
     };
@@ -81,15 +67,8 @@ var ViewModel = function(){
         if($('#places').width()>$('#content').width()){
             self.toggleMenuDisplay();
         }
-        marker= getMarker(place.name);
-        if(place.visible){
-            marker.setMap(map);
-            markerAnimation(marker);
-            place.visible=false;
-        }else{
-            markerAnimation(marker);
-            place.visible=true;
-        }
+        marker= getMarker(place.name,markers);
+        markerInteration(map,marker);
     }
     this.toggleMenuDisplay = function(){
         if ($('#places').hasClass('slide-menu-on')){
