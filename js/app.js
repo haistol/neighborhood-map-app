@@ -25,6 +25,11 @@ function setMarkers(list){
             title: marker.name,
           };
         this.marker= new google.maps.Marker(markerOptions);
+        this.marker.addListener('click', function(marker){
+            return function(){
+            markerInteration(marker);
+            };
+        }(this.marker));
         markers.push(this.marker);
     });
 }
@@ -44,8 +49,11 @@ function getMarker(title){
     });
     return maker;
 }
-function marketIneraction(marke,animation){
-    marker.setAnimation(animation);
+function markerInteration(marker){
+    markerAnimation(marker);
+}
+function markerAnimation(marker){
+    marker.setAnimation(google.maps.Animation.BOUNCE);
     setTimeout(function(){
         marker.setAnimation(google.maps.Animation.NONE);
     },5000);
@@ -55,7 +63,6 @@ var ViewModel = function(){
     var self = this;
     this.filter = ko.observable("");
     this.places= ko.observableArray([]);
-    this.menu= true;
     PlacesList.forEach(function(place){
         self.places.push(new Place(place));
     })
@@ -71,27 +78,30 @@ var ViewModel = function(){
         });
     };
     this.showInfo= function(place){
+        if($('#places').width()>$('#content').width()){
+            self.toggleMenuDisplay();
+        }
         marker= getMarker(place.name);
         if(place.visible){
             marker.setMap(map);
-            marketIneraction(marker,google.maps.Animation.BOUNCE);
+            markerAnimation(marker);
             place.visible=false;
         }else{
-            marketIneraction(marker,google.maps.Animation.NONE);
+            markerAnimation(marker);
             place.visible=true;
         }
     }
     this.toggleMenuDisplay = function(){
-        if (self.menu){
-            self.menu=false;
-            document.getElementById("places").style.display="none";
-            document.getElementById("places").style.width="0";
-            document.getElementById("content").style.width = "100%";
+        if ($('#places').hasClass('slide-menu-on')){
+            $('#places').addClass('slide-menu-off');
+            $('#places').removeClass('slide-menu-on');
+            $('#content').addClass('content-full');
+            $('#content').removeClass('content-divide');
         }else{
-            self.menu=true;
-            document.getElementById("places").style.display="block";
-            document.getElementById("places").style.width = "80%";
-            document.getElementById("content").style.width = "20%";
+            $('#places').addClass('slide-menu-on');
+            $('#places').removeClass('slide-menu-off');
+            $('#content').addClass('content-divide');
+            $('#content').removeClass('content-full');
         }
     }
 }
