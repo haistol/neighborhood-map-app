@@ -12,8 +12,8 @@ function createInfoContent(location){
 }
 function wikipediaDataRequest(location){
     var wikiRequestTimeout = setTimeout(function(){
-        data='failed to get wikipedia resources';
-    }, 8000);
+        $('#wikidata').append('<h4>Failed to get wikipedia resources</h4>');
+    }, 5000);
     var wikiUrl = 'http://en.wikipedia.org/w/api.php?action=opensearch&search='+
         location +'&format=json&callback=wikiCallback';
     $.ajax({
@@ -24,6 +24,7 @@ function wikipediaDataRequest(location){
             var article = response[2][0];
             var articlelink = response[3][0];
             $('#wikidata').append('<p>'+article+' <a href="' + articlelink+'">Wikipedia</a></p>');
+            clearTimeout(wikiRequestTimeout);
         }
     });
 }
@@ -41,7 +42,7 @@ function foursquarePhotoRequest(venueId){
             console.log(response.response.photos.items[0].suffix);
             var prefix = response.response.photos.items[0].prefix;
             var suffix = response.response.photos.items[0].suffix;
-            $('#foursq-img').append('<img src="'+prefix+'150x150' + suffix+'">');
+            $('#foursq-img').append('<img src="'+prefix+'200x150' + suffix+'">');
         },
         error: function (e) {
             $('#foursq-img').append('<h4>Foursquare data is unavailable.</h4>');
