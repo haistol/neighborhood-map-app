@@ -4,12 +4,13 @@ function initMap(){
     showMarkers(map,markers);
 }
 function createInfoContent(location){
+    let place=getPlace(location,PlacesList);
     var content=location;
-    wikipediaDataRequest(location);
+    foursquarePhotoRequest(place.foursquareID);
+    wikipediaDataRequest(place.name);
     return content;
 }
 function wikipediaDataRequest(location){
-    var data='';
     var wikiRequestTimeout = setTimeout(function(){
         data='failed to get wikipedia resources';
     }, 8000);
@@ -18,14 +19,34 @@ function wikipediaDataRequest(location){
     $.ajax({
         url:wikiUrl,
         dataType: "jsonp",
+        async: true,
         success: function( response ) {
-            console.log(response);
             var article = response[2][0];
             var articlelink = response[3][0];
             $('#wikidata').append('<p>'+article+' <a href="' + articlelink+'">Wikipedia</a></p>');
         }
     });
-    return data;
+}
+function foursquarePhotoRequest(venueId){
+    var FQUrl = 'https://api.foursquare.com/v2/venues/' + venueId +'/photos';
+    $.ajax({
+        url:FQUrl,
+        dataType: "json",
+        data: 'limit=1' +
+         '&client_id='+ CLIENT_ID +
+         '&client_secret='+ CLIENT_SECRET +
+         '&v=20180301',
+        async: true,
+        success: function( response ) {
+            console.log(response.response.photos.items[0].suffix);
+            var prefix = response.response.photos.items[0].prefix;
+            var suffix = response.response.photos.items[0].suffix;
+            $('#foursq-img').append('<img src="'+prefix+'150x150' + suffix+'">');
+        },
+        error: function (e) {
+            $('#foursq-img').append('<h4>Foursquare data is unavailable.</h4>');
+        }
+    });
 }
 var ViewModel = function(){
     var self = this;
