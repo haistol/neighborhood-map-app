@@ -56,7 +56,6 @@ function foursquarePhotoRequest(venueId){
          '&v=20180301',
         async: true,
         success: function( response ) {
-            console.log(response.response.photos.items[0].suffix);
             var prefix = response.response.photos.items[0].prefix;
             var suffix = response.response.photos.items[0].suffix;
             $('#foursq-img').append('<img src="'+prefix+'200x150' + suffix+'">');
