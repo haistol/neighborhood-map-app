@@ -1,7 +1,6 @@
 /* library with the functions to interact with google maps
 API and the view related to the map */
 
-var infowindow=null;
 
 /**
  * @description create a new google map obeject centered to a latitud and longitud
@@ -103,7 +102,7 @@ function showMarker(map,title,markers){
  * @param {array} markers
  */
 function markerInteration(map, marker){
-    const contentStr='<div id="foursq-img"></div><div id="wikidata"></div>';
+    const contentStr='<h3 id="place-name">'+marker.title+'</h3><div id="foursq-img"></div><div id="wikidata"></div>';
     createInfoContent(marker.title);
     showInfoWindow(map, marker,contentStr);
     markerAnimation(marker);
@@ -135,5 +134,9 @@ function showInfoWindow(map,marker,contentStr){
       });
     infowindow.open(map, marker);
 }
-
-
+/**
+ * @description Google map api error handler  
+ */
+function gm_authFailure() {
+    alert("Somothing went worng with the map, please try later");
+}

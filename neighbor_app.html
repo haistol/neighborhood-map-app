@@ -12,10 +12,13 @@
     <div class="container">
         
         <div id="places" class="slide-menu-off">
-            <h1>MY LOCATION COOL</h1>
+            <h1>Colonial Zone</h1>
             <div id="search-area">
-                <p><input id="search-input" type="text" data-bind="event: { keyup: searchList }, textInput: filter"/> search</p>
+                <p><input id="search-input" type="text" data-bind="event: { keyup: searchList }, textInput: filter"/>
+                    <button id="clear-filter" data-bind="click: resetFilter">Filter off</button>
+                 </p>
             </div>
+            <hr>
             <nav id="filter-menu">
                 <ul data-bind="foreach: places">
                     <li class="place-name" data-bind="if: visible"><p data-bind="text: name, click: $parent.showInfo"></p></li>

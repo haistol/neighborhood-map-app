@@ -1,15 +1,26 @@
+/**
+ * @description Instatiate a new google map and add a group of markers
+  */
 function initMap(){
     map = createMap(MapLocation);
-    markers=setMarkers(map,PlacesList);
-    showMarkers(map,markers);
+    markersList=setMarkers(map,PlacesList);
+    showMarkers(map,markersList);
 }
+/**
+ * @description Gather and display the extar information for a given location
+ * @param {string} location
+ */
 function createInfoContent(location){
     let place=getPlace(location,PlacesList);
-    var content=location;
     foursquarePhotoRequest(place.foursquareID);
     wikipediaDataRequest(place.name);
-    return content;
 }
+/**
+ * @description call the wikipidea API and search for and article 
+ * about the give location. the reult is placed in a DOM element with 
+ * the id "wikidata"
+ * @param {string} location
+ */
 function wikipediaDataRequest(location){
     var wikiRequestTimeout = setTimeout(function(){
         $('#wikidata').append('<h4>Failed to get wikipedia resources</h4>');
@@ -28,6 +39,12 @@ function wikipediaDataRequest(location){
         }
     });
 }
+/**
+ * @description call the Foursquare API and get the first photo for 
+ * the give venue id. the reult is placed in a DOM element with 
+ * the id "foursq-img"
+ * @param {string} venueId
+ */
 function foursquarePhotoRequest(venueId){
     var FQUrl = 'https://api.foursquare.com/v2/venues/' + venueId +'/photos';
     $.ajax({
@@ -49,6 +66,7 @@ function foursquarePhotoRequest(venueId){
         }
     });
 }
+
 var ViewModel = function(){
     var self = this;
     this.filter = ko.observable("");
@@ -61,20 +79,24 @@ var ViewModel = function(){
         self.places().forEach(function(place){
             if(place.name.toUpperCase().indexOf(searchStr) >-1){
                 place.visible(true);
-                showMarker(map,place.name, markers);
+                showMarker(map,place.name, markersList);
             }else{
                 place.visible(false);
-                showMarker(null,place.name, markers);
+                showMarker(null,place.name, markersList);
             };
         });
     };
     this.showInfo= function(place){
         if($('#places').width()>$('#content').width()){
             self.toggleMenuDisplay();
-        }
-        marker= getMarker(place.name,markers);
+        };
+        marker= getMarker(place.name,markersList);
         markerInteration(map,marker);
-    }
+    };
+    this.resetFilter = function(){
+        self.filter("");
+        self.searchList();
+    };
     this.toggleMenuDisplay = function(){
         if ($('#places').hasClass('slide-menu-on')){
             $('#places').addClass('slide-menu-off');
@@ -86,7 +108,8 @@ var ViewModel = function(){
             $('#places').removeClass('slide-menu-off');
             $('#content').addClass('content-divide');
             $('#content').removeClass('content-full');
-        }
-    }
+        };
+    };
 }
+
 ko.applyBindings(new ViewModel());
