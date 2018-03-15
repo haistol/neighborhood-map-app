@@ -72,7 +72,7 @@ var ViewModel = function(){
     this.places= ko.observableArray([]);
     PlacesList.forEach(function(place){
         self.places.push(new Place(place));
-    })
+    });
     this.searchList = function(){
         var searchStr= self.filter().toUpperCase();
         self.places().forEach(function(place){
@@ -82,13 +82,13 @@ var ViewModel = function(){
             }else{
                 place.visible(false);
                 showMarker(null,place.name, markersList);
-            };
+            }
         });
     };
     this.showInfo= function(place){
         if($('#places').width()>$('#content').width()){
             self.toggleMenuDisplay();
-        };
+        }
         marker= getMarker(place.name,markersList);
         markerInteration(map,marker);
     };
@@ -107,8 +107,8 @@ var ViewModel = function(){
             $('#places').removeClass('slide-menu-off');
             $('#content').addClass('content-divide');
             $('#content').removeClass('content-full');
-        };
+        }
     };
-}
+};
 
 ko.applyBindings(new ViewModel());

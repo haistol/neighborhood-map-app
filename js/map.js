@@ -62,7 +62,7 @@ function getMarker(title,markers){
     markers.forEach(function(item){
         if(item.title.toUpperCase()==searchStr){
             marker= item;
-        };
+        }
     });
     return marker;
 }
@@ -79,7 +79,7 @@ function getPlace(name,places){
     places.forEach(function(item){
         if(item.name.toUpperCase()==searchStr){
             place= item;
-        };
+        }
     });
     return place;
 }
@@ -94,7 +94,7 @@ function showMarker(map,title,markers){
     marker= getMarker(title,markers);
     if(marker){
         marker.setMap(map);
-    };
+    }
 }
 /**
  * @description  add a visible reaction to the marker after a interaction
